@@ -1,13 +1,19 @@
 import express from "express";
 import {
+  deleteLessonVideos,
   test,
+  updateIntroCourseVideo,
+  updateLessonVideo,
   uploadCACImage,
+  uploadProductimage,
   uploadProfile,
   uploadUtilityImage,
   uploadVideo,
   uploadVideoLesson,
+  uploadaboutpix,
   uploadcourseimage,
   uploadlessonimage,
+  uploadlogo,
 } from "../controllers/upload.js";
 import multer from "multer";
 import path from "path";
@@ -77,7 +83,7 @@ const imageStorage = (fieldname, folder) => {
 };
 
 const videoStorage = (fieldname, folder) => {
-  return multer.diskStorage({
+  return multer.memoryStorage({
     destination: (req, file, callBack) => {
       callBack(null, `./public/videos/`);
     },
@@ -90,8 +96,25 @@ const videoStorage = (fieldname, folder) => {
   });
 };
 
+const videoStorage2 = (fieldname, folder) => {
+  return multer.diskStorage({
+    destination: (req, file, callBack) => {
+      if (fieldname === "videoss") {
+        callBack(null, `./public/videos/`);
+      }
+    },
+    filename: (req, file, callBack) => {
+      const prefix = fieldname === "videoss" ? "videoss" : fieldname;
+      callBack(
+        null,
+        `${prefix}-${Date.now()}${path.extname(file.originalname)}`
+      );
+    },
+  });
+};
+
 const imageUpload = multer({
-  storage: imageStorage("profilepix", "profilepix"),
+  storage: imageStorage("lessons", "lessons"),
   fileFilter: imageFileFilter,
 });
 
@@ -99,12 +122,29 @@ const videoUpload = multer({
   storage: videoStorage("videoss", "docs"),
   //fileFilter: videoFileFilter,
 });
+const videoUpload2 = multer({
+  storage: videoStorage2("videoss", "docs"),
+  //fileFilter: videoFileFilter,
+});
+
 const cacImageUpload = multer({
   storage: imageStorage("cac", "docs"),
 });
 
 const utilityImageUpload = multer({
   storage: imageStorage("utility", "utility"),
+});
+const logoUpload = multer({
+  storage: imageStorage("logo", "logo"),
+  //fileFilter: imageFileFilter,
+});
+const aboutpixUpload = multer({
+  storage: imageStorage("aboutpix", "aboutpix"),
+  //fileFilter: imageFileFilter,
+});
+const productpixUpload = multer({
+  storage: imageStorage("productpix", "productpix"),
+  //fileFilter: imageFileFilter,
 });
 
 // Route for image uploads
@@ -119,6 +159,12 @@ routes.put(
   imageUpload.single("lessonimage"),
   uploadlessonimage
 );
+routes.put("/uploadlogo", logoUpload.single("logo"), uploadlogo);
+routes.put(
+  "/uploadaboutpix",
+  aboutpixUpload.single("aboutpix"),
+  uploadaboutpix
+);
 
 //this is for dewpay please ignore
 
@@ -128,18 +174,34 @@ routes.put(
   utilityImageUpload.single("utility"),
   uploadUtilityImage
 );
+routes.put(
+  "/uploadproductpix",
+  productpixUpload.single("productpix"),
+  uploadProductimage
+);
 
 //this is for dewpay please ignore
 
 // Route for video uploads
-routes.put("/uploadvid", videoUpload.single("coursevideos"), uploadVideo);
+routes.put("/uploadvid", videoUpload2.single("coursevideos"), uploadVideo);
+
 routes.put(
   "/uploadlessonvideo",
-  videoUpload.single("lessonvideos"),
+  videoUpload2.single("lessonvideos"),
   //checkVideoDuration(300),
   uploadVideoLesson
 );
-
+routes.put(
+  "/updateintrovid",
+  videoUpload.single("introcoursevideos"),
+  updateIntroCourseVideo
+);
+routes.put(
+  "/updatelessonvideo",
+  videoUpload.single("lesonvids"),
+  updateLessonVideo
+);
+routes.delete("/deletevideos", deleteLessonVideos);
 routes.get("/test", test);
 
 export default routes;
