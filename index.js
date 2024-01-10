@@ -2,6 +2,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import uploadroutes from "./routes/upload.js";
+//import { join } from "path";
+import path from "path";
 
 const app = express();
 
@@ -9,8 +11,10 @@ app.use(bodyParser.json());
 app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+const __dirname = path.resolve();
 
-// routes
+app.use(express.static(path.join(__dirname, "public")));
+
 app.use("/", uploadroutes);
 
 // error handler for unhandled promise rejections
