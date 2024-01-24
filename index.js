@@ -2,6 +2,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import uploadroutes from "./routes/upload.js";
+import uploadvotezroutes from "./routes/upload_voterz.js";
+
 //import { join } from "path";
 import path from "path";
 
@@ -16,6 +18,7 @@ const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", uploadroutes);
+app.use("/", uploadvotezroutes);
 
 // error handler for unhandled promise rejections
 process.on("uncaughtException", function (err) {
