@@ -18,7 +18,9 @@ const __dirname = path.resolve();
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", uploadroutes);
+
 app.use("/", uploadvotezroutes);
+//app.use("/", uploadScavengeroutes);
 
 // error handler for unhandled promise rejections
 process.on("uncaughtException", function (err) {

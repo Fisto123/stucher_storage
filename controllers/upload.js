@@ -1,14 +1,13 @@
 import { promises as fsPromises } from "fs";
 import path from "path";
+//const publicLink = "https://stucherstorage.michofat.com/public/";
 
-//const publicLink = "http://192.168.0.134:4100/";
-const publicLink = "https://stucherstorage.michofat.com/public/";
+const publicLink = "http://192.168.0.134:4100/";
 export const uploadImage = async (req, res) => {
   try {
     if (!req.file) {
       return res.status(404).send("No file uploaded");
     }
-    //192.168.0.134:4100/public/videos/
 
     const image = `${publicLink}images/` + req.file.filename;
     res.status(200).send(image);
@@ -17,7 +16,25 @@ export const uploadImage = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-
+export const uploadImages = async (req, res) => {
+  console.log("hi");
+  try {
+    if (!req.files || req.files.length === 0) {
+      return res.status(404).send("No files uploaded");
+    } else if (!req.files || req.files.length < 3) {
+      return res.status(404).send("minimum upload is 3");
+    } else if (!req.files || req.files.length > 10) {
+      return res.status(404).send("maximum upload is 10");
+    }
+    const images = req.files.map(
+      (file) => `${publicLink}images/` + file.filename
+    );
+    res.status(200).send(images);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Internal Server Error");
+  }
+};
 // controllers/upload.js
 
 export const uploadVideo = async (req, res) => {
@@ -135,3 +152,8 @@ function extractFilenameFromURL(url) {
     return null;
   }
 }
+
+export const reachable = async (req, res) => {
+  console.log("am reachable");
+  res.status(200).send({ message: "hi" });
+};

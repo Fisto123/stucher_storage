@@ -52,7 +52,6 @@ const replaceUpload = multer({
 });
 // Route for image uploads
 
-routes.put("/uploadimage", imageUpload.single("myimage"), uploadImage);
-routes.put("/replaceimage", replaceUpload.single("myimage"), replaceImage);
+ routes.put("/replaceimage", replaceUpload.single("myimage"), replaceImage);
 
 export default routes;

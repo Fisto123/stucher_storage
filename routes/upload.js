@@ -1,8 +1,10 @@
 import express from "express";
 import {
   deleteCourseLessonsVideos,
+  reachable,
   replacevideo,
   uploadImage,
+  uploadImages,
   uploadVideo,
 } from "../controllers/upload.js";
 import multer from "multer";
@@ -77,8 +79,10 @@ const videoUpload2 = multer({
 
 // Route for image uploads
 routes.put("/addsingleimage", imageUpload.single("myimage"), uploadImage);
+routes.put("/addmultipleimages", imageUpload.array("myimages"), uploadImages);
 routes.put("/addsinglevideo", videoUpload.single("myvideo"), uploadVideo);
 routes.put("/replacevideo", videoUpload2.single("newvideo"), replacevideo);
 routes.delete("/deletecourselessonsvideos", deleteCourseLessonsVideos);
+routes.get("/reachable", reachable);
 
 export default routes;
