@@ -17,14 +17,10 @@ export const uploadImage = async (req, res) => {
   }
 };
 export const uploadImages = async (req, res) => {
-  console.log("hi");
+  console.log(req.files);
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(404).send("No files uploaded");
-    } else if (!req.files || req.files.length < 3) {
-      return res.status(404).send("minimum upload is 3");
-    } else if (!req.files || req.files.length > 10) {
-      return res.status(404).send("maximum upload is 10");
     }
     const images = req.files.map(
       (file) => `${publicLink}images/` + file.filename

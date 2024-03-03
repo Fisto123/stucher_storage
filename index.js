@@ -30,7 +30,7 @@ process.on("uncaughtException", function (err) {
 app.get("/", (req, res) => {
   res.json("Hello World!");
 });
-const PORT = 4100;
+const PORT = 6400;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 
 export default app;
